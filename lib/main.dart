@@ -19,23 +19,48 @@ class _MyAppState extends State<MyApp> {
   final _questions = const [
     {
       "questionText": "What's your favorite color?",
-      "answers": ["Blue", "Red", "Green", "Yellow"]
+      "answers": [
+        {"text": "Blue", "score": 10},
+        {"text": "Green", "score": 5},
+        {"text": "Red", "score": 7},
+        {"text": "Black", "score": 8},
+      ]
     },
     {
       "questionText": "What's your favorite animal?",
-      "answers": ["Rabbit", "Horse", "Dog", "Cat"]
+      "answers": [
+        {"text": "Rabbit", "score": 5},
+        {"text": "Horse", "score": 6},
+        {"text": "Dog", "score": 8},
+        {"text": "Cat", "score": 10},
+      ]
     },
     {
-      "questionText": "What's your favorite subjuect?",
-      "answers": ["Science", "Religion", "English", "Maths"]
+      "questionText": "What's your favorite subject?",
+      "answers": [
+        {"text": "Religion", "score": 7},
+        {"text": "Science", "score": 10},
+        {"text": "Maths", "score": 6},
+        {"text": "Computer Science", "score": 8},
+      ]
     }
   ];
-  _answerQuestion() {
+  var _totalScore = 0;
+
+  _answerQuestion(int score) {
     if (_questionIndex < _questions.length) {
       setState(() {
         _questionIndex++;
       });
+      _totalScore += score;
     }
+  }
+
+  _resetQuiz() {
+    setState(() {
+      _questionIndex = 0;
+      _totalScore = 0;
+    });
   }
 
   @override
@@ -43,14 +68,14 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
         home: Scaffold(
       appBar: AppBar(
-          title: Text("This is the Quiz App"),
-          backgroundColor: Color.fromRGBO(200, 100, 180, 0.7)),
+        title: Text("This is the Quiz App"),
+      ),
       body: _questionIndex < _questions.length
           ? Quiz(
               questions: _questions,
               questionIndex: _questionIndex,
               answerQuestion: _answerQuestion)
-          : Result(),
+          : Result(_totalScore, _resetQuiz),
     ));
   }
 }
